@@ -18,9 +18,16 @@ public class Server{
 
             System.out.println("Searching for connection...");
             while(running){
+                if(chatConnections[0] != null){
+                    chatUserCount = chatConnections[0].getTotalUsers();
+                }
+
+                //The loop pauses at the serverSocket.accept, meaning that it will not get the correct chatUserCount from above
                 chatConnections[chatUserCount] = new ServerThread(serverSocket.accept(), names[chatUserCount], chatUserCount);
                 chatConnections[chatUserCount].start();
-                chatUserCount++;
+                //chatConnections[chatUserCount].setTotalUsers(++chatUserCount);
+                int temp = chatUserCount;
+                chatConnections[temp].setTotalUsers(++chatUserCount);
                 if(chatUserCount == 10){
                     System.out.println("Max count of 10 users");
                 }

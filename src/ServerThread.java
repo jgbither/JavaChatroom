@@ -17,9 +17,7 @@ public class ServerThread extends Thread{
         this.name = name;
         chatNumber = number;
         chatConnections[number] = this;
-        totalUsers = number;
-        System.out.println(totalUsers);
-        //Have to make it so serverThread will send the clients message to all users!!!
+        System.out.println("Total users = " + totalUsers);
     }
 
     public void run(){
@@ -38,20 +36,22 @@ public class ServerThread extends Thread{
         }catch (SocketException e){
             System.out.println("User " + name + " disconnected!");
             distributeMessage("User " + name + " disconnected!");
+            totalUsers--;
+
         }catch (Exception e){
-            System.out.println("LOL IT's UCKED MATE");
+            System.out.println(e.getMessage());
         }
     }
 
     public void distributeMessage(String message, String nameOfSender){
         //pw.println(nameOfSender + ": " + message);
-        for(int x = 0; x <= totalUsers; x++){
+        for(int x = 0; x <= totalUsers-1; x++){
             System.out.println("Sending message to " + chatConnections[x].name);
             chatConnections[x].getPw().println(nameOfSender + ": " + message);
         }
     }
     public void distributeMessage(String message){
-        for(int x = 0; x <= totalUsers; x++){
+        for(int x = 0; x <= totalUsers-1; x++){
             chatConnections[x].getPw().println(message);
         }
     }
@@ -60,4 +60,11 @@ public class ServerThread extends Thread{
         return this.pw;
     }
 
+    public int getTotalUsers() {
+        return totalUsers;
+    }
+
+    public void setTotalUsers(int totalUsers) {
+        ServerThread.totalUsers = totalUsers;
+    }
 }
