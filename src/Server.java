@@ -10,27 +10,42 @@ public class Server{
 
     public static void main(String args[]) {
         final int PORT = 55555;
-        String text;
         boolean running = true;
-        int chatUserCount = 0;
+        int emptySlot = 0;
 
         try (ServerSocket serverSocket = new ServerSocket(55555,0 ,InetAddress.getByName("localhost"))){
 
             System.out.println("Searching for connection...");
             while(running){
-                if(chatConnections[0] != null){
-                    chatUserCount = chatConnections[0].getTotalUsers();
+                Socket socket = serverSocket.accept();
+
+                System.out.println("Found Connection!");
+
+                for (int x = 0; x < 10; x++){
+                    if (chatConnections[x] != null){
+                        chatConnections = chatConnections[x].getServerSlots();
+                    } //Might need to do an else if here
                 }
 
-                //The loop pauses at the serverSocket.accept, meaning that it will not get the correct chatUserCount from above
-                chatConnections[chatUserCount] = new ServerThread(serverSocket.accept(), names[chatUserCount], chatUserCount);
-                chatConnections[chatUserCount].start();
-                //chatConnections[chatUserCount].setTotalUsers(++chatUserCount);
-                int temp = chatUserCount;
-                chatConnections[temp].setTotalUsers(++chatUserCount);
-                if(chatUserCount == 10){
-                    System.out.println("Max count of 10 users");
+               /* if(chatConnections ==  null) {
+                    System.out.println("Starting new serverThread");
+                    chatConnections = new ServerThread[10];
+                }else{
+                    System.out.println("Retrieving serverThread");
+                    chatConnections = chatConnections[0].getServerSlots();
+                }*/
+
+                for(int x = 0; x < 10; x++){
+                    if(chatConnections[x] == null){
+                        System.out.println("Found an empty spot in slot: " + x);
+                        emptySlot = x;
+                        break;
+                    } else if(x == 9){
+                        System.out.println("TOO MANY USERS LOL");
+                    }
                 }
+                chatConnections[emptySlot] = new ServerThread(socket, names[emptySlot], emptySlot);
+                chatConnections[emptySlot].start();
             }
 
         } catch (Exception e) {
