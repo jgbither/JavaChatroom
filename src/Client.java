@@ -6,18 +6,20 @@ import java.util.*;
 import java.net.*;
 public class Client implements Runnable{
     final int PORT = 55555;
-    Scanner scan;
-    String text;
+    private Scanner scan;
     private String name;
-    Socket socket;
-    PrintWriter pw;
-    BufferedReader br;
-    static Client client;
+    private ClientGui gui;
+    private Socket socket;
+    private PrintWriter pw;
+    private BufferedReader br;
+    private static Client client;
 
-    public void connect(int port) {
+    private void connect(int port) {
         try {
             socket = new Socket( InetAddress.getByName("localhost"),port);
             scan = new Scanner(System.in);
+
+            gui = new ClientGui();
 
             pw = new PrintWriter(socket.getOutputStream(), true);
             br = new BufferedReader(new InputStreamReader(socket.getInputStream()));

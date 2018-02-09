@@ -11,6 +11,7 @@ public class Server{
     public static void main(String args[]) {
         final int PORT = 55555;
         boolean running = true;
+        boolean serverFull = false;
         int emptySlot = 0;
 
         try (ServerSocket serverSocket = new ServerSocket(55555,0 ,InetAddress.getByName("localhost"))){
@@ -39,13 +40,17 @@ public class Server{
                     if(chatConnections[x] == null){
                         System.out.println("Found an empty spot in slot: " + x);
                         emptySlot = x;
+                        serverFull = false;
                         break;
                     } else if(x == 9){
                         System.out.println("TOO MANY USERS LOL");
+                        serverFull = true;
                     }
                 }
-                chatConnections[emptySlot] = new ServerThread(socket, names[emptySlot], emptySlot);
-                chatConnections[emptySlot].start();
+                if(!serverFull) {
+                    chatConnections[emptySlot] = new ServerThread(socket, names[emptySlot], emptySlot);
+                    chatConnections[emptySlot].start();
+                }
             }
 
         } catch (Exception e) {
