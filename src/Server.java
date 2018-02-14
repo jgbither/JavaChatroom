@@ -14,7 +14,7 @@ public class Server{
         boolean serverFull = false;
         int emptySlot = 0;
 
-        try (ServerSocket serverSocket = new ServerSocket(55555,0 ,InetAddress.getByName("localhost"))){
+        try (ServerSocket serverSocket = new ServerSocket(55555,0 )){
 
             System.out.println("Searching for connection...");
             while(running){
@@ -27,14 +27,6 @@ public class Server{
                         chatConnections = chatConnections[x].getServerSlots();
                     } //Might need to do an else if here
                 }
-
-               /* if(chatConnections ==  null) {
-                    System.out.println("Starting new serverThread");
-                    chatConnections = new ServerThread[10];
-                }else{
-                    System.out.println("Retrieving serverThread");
-                    chatConnections = chatConnections[0].getServerSlots();
-                }*/
 
                 for(int x = 0; x < 10; x++){
                     if(chatConnections[x] == null){

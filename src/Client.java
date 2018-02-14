@@ -9,6 +9,7 @@ public class Client implements Runnable{
     private Scanner scan;
     private String name;
     private ClientGui gui;
+    private String ipAddress;
     private Socket socket;
     private PrintWriter pw;
     private BufferedReader br;
@@ -16,10 +17,13 @@ public class Client implements Runnable{
 
     private void connect(int port) {
         try {
-            socket = new Socket( InetAddress.getByName("localhost"),port);
-            scan = new Scanner(System.in);
+            gui = new ClientGui(this);
+            ipAddress = gui.getIpAddress();
 
-            gui = new ClientGui();
+            System.out.println("Client IP is " + ipAddress);
+
+            socket = new Socket( ipAddress,port);
+            scan = new Scanner(System.in);
 
             pw = new PrintWriter(socket.getOutputStream(), true);
             br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -28,10 +32,6 @@ public class Client implements Runnable{
 
             Thread chatThread = new Thread(client);
             chatThread.start();
-
-            while(true){
-                pw.println(scan.nextLine());
-            }
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -42,11 +42,17 @@ public class Client implements Runnable{
     public void run(){
         try {
             while (true) {
-                System.out.println(br.readLine());
+                String tempHolder = br.readLine();
+                System.out.println(tempHolder);
+                gui.printMessage(tempHolder);
             }
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
+    }
+
+    public void sendMessage(String message){
+        pw.println(message);
     }
 
     public static void main(String args[]) {
