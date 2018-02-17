@@ -1,11 +1,10 @@
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.*;
 import java.net.*;
 public class Client implements Runnable{
-    final int PORT = 55555;
+    private int port;
     private Scanner scan;
     private String name;
     private ClientGui gui;
@@ -18,11 +17,17 @@ public class Client implements Runnable{
     private void connect(int port) {
         try {
             gui = new ClientGui(this);
+            while(!gui.CanRetrieveInput()) {
+
+            }
+
+            name = gui.getName();
             ipAddress = gui.getIpAddress();
+            port = gui.getPort();
 
             System.out.println("Client IP is " + ipAddress);
 
-            socket = new Socket( ipAddress,port);
+            socket = new Socket(ipAddress, port);
             scan = new Scanner(System.in);
 
             pw = new PrintWriter(socket.getOutputStream(), true);

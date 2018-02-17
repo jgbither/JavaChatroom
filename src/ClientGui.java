@@ -12,6 +12,14 @@ public class ClientGui extends JFrame{
     private JTextField  ipAddressField;
     private JButton     acceptButton;
     private String      ipAddress;
+    private int         port;
+    private String      name;
+    private JTextField  portField;
+    private JLabel      ipAddressLabel;
+    private JLabel      portLabel;
+    private JLabel      nameLabel;
+    private JTextField  nameField;
+    private boolean     canRetrieveInput = false;
     public ClientGui(Client client){
         initGui();
         this.client = client;
@@ -19,15 +27,51 @@ public class ClientGui extends JFrame{
 
     private void initGui(){
         JPanel introPanel = new JPanel();
+        GridLayout layout = new GridLayout(4,2);
+        layout.setHgap(100);
+        layout.setVgap(100);
+        introPanel.setLayout(layout);
         JPanel panel = new JPanel();
         ipAddress = "";
 
-        acceptButton = new JButton("Accept");
+        portLabel = new JLabel("Port:");
+        portLabel.setHorizontalAlignment(JLabel.CENTER);
+        portLabel.setVerticalAlignment(JLabel.CENTER);
+        portField = new JTextField();
+        portField.setHorizontalAlignment(JTextField.CENTER);
+        portField.setColumns(12);
+
+        ipAddressLabel = new JLabel("IP Address:");
+        ipAddressLabel.setHorizontalAlignment(JLabel.CENTER);
+        ipAddressLabel.setVerticalAlignment(JLabel.CENTER);
         ipAddressField = new JTextField();
         ipAddressField.setColumns(12);
+
+        nameField = new JTextField();
+        nameLabel = new JLabel("Name: ");
+        nameLabel.setHorizontalAlignment(JLabel.CENTER);
+        nameLabel.setVerticalAlignment(JLabel.CENTER);
+        nameField.setColumns(12);
+
+        acceptButton = new JButton("Accept");
+        acceptButton.setVerticalAlignment(JButton.CENTER);
+        acceptButton.setHorizontalAlignment(JButton.CENTER);
+
+        //ipAddressLabel.setLabelFor(ipAddressField);
+        introPanel.add(ipAddressLabel);
         introPanel.add(ipAddressField);
+        introPanel.add(portLabel);
+        introPanel.add(portField);
+        introPanel.add(nameLabel);
+        introPanel.add(nameField);
         introPanel.add(acceptButton);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        try{
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
 
         setTitle("Chatroom");
         setSize(600, 400);
@@ -47,9 +91,13 @@ public class ClientGui extends JFrame{
             }
         });
 
+        Font font = new Font("Helvetica", Font.PLAIN, 12);
         textArea = new JTextArea();
+        textArea.setFont(font);
         textArea.setLineWrap(true);
+        textArea.setEditable(false);
         textArea.setVisible(true);
+        textField.setFont(font);
 
         JScrollPane scroll = new JScrollPane (textArea);
         scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -61,9 +109,10 @@ public class ClientGui extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 ipAddress = ipAddressField.getText();
-                System.out.println(ipAddress);
+                port = Integer.parseInt(portField.getText());
+                name = nameField.getText();
+                canRetrieveInput = true;
                 getContentPane().removeAll();
-                System.out.println(ipAddress);
                 add(scroll, BorderLayout.CENTER);
                 add(panel, BorderLayout.SOUTH);
                 setVisible(true);
@@ -76,11 +125,20 @@ public class ClientGui extends JFrame{
     }
 
     public String getIpAddress (){
-        while(ipAddress.equals("")){
-            System.out.print(ipAddress);
-        }
-        System.out.println("OSKOFDKf");
         return ipAddress;
     }
+
+    public boolean CanRetrieveInput() {
+        return canRetrieveInput;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
 }
-//172.20.4.181
+//172.20.4.154
