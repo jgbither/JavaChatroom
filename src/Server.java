@@ -6,7 +6,6 @@ import java.net.*;
 
 public class Server{
     private static ServerThread[] chatConnections = new ServerThread[10];
-    private static String[] names = {"Bill", "James", "John", "Wes", "Josh", "Andrew", "Aaron", "Adave", "Joey", "Caleb"};
 
     public static void main(String args[]) {
         final int PORT = 55555;
@@ -40,7 +39,7 @@ public class Server{
                     }
                 }
                 if(!serverFull) {
-                    chatConnections[emptySlot] = new ServerThread(socket, names[emptySlot], emptySlot);
+                    chatConnections[emptySlot] = new ServerThread(socket, emptySlot);
                     chatConnections[emptySlot].start();
                 }
             }

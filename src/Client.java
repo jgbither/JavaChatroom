@@ -17,10 +17,13 @@ public class Client implements Runnable{
     private void connect(int port) {
         try {
             gui = new ClientGui(this);
-            while(!gui.CanRetrieveInput()) {
-
+            boolean flag = gui.CanRetrieveInput();
+            while(!flag) {
+                flag = gui.CanRetrieveInput();
+                Thread.sleep(500);
             }
 
+            System.out.println("DONE");
             name = gui.getName();
             ipAddress = gui.getIpAddress();
             port = gui.getPort();
@@ -32,6 +35,9 @@ public class Client implements Runnable{
 
             pw = new PrintWriter(socket.getOutputStream(), true);
             br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+            System.out.println("Sending name: " + name);
+            pw.println(name);
 
             System.out.println("Print whatever you want");
 

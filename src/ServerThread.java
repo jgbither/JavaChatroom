@@ -9,19 +9,20 @@ public class ServerThread extends Thread{
     private BufferedReader br;
     private static ServerThread[] chatConnections = new ServerThread[10];
 
-    public ServerThread(Socket socket, String name, int number){
-        super("localhost");
+    ServerThread(Socket socket, int number){
+        //super("localhost");
         this.socket = socket;
-        this.name = name;
         chatNumber = number;
         chatConnections[number] = this;
     }
 
     public void run(){
-        System.out.println(name + " has connected!");
+
         try{
             pw = new PrintWriter(socket.getOutputStream(), true);
             br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            name = br.readLine();
+            System.out.println(name + " Has Connected!");
             String input;
             distributeMessage(name + " has connected!");
             while ((input = br.readLine()) != null){

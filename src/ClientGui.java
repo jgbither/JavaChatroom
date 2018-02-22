@@ -3,6 +3,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 
 public class ClientGui extends JFrame{
     private JTextField  textField;
@@ -15,12 +17,13 @@ public class ClientGui extends JFrame{
     private int         port;
     private String      name;
     private JTextField  portField;
+    private JScrollPane scroll;
     private JLabel      ipAddressLabel;
     private JLabel      portLabel;
     private JLabel      nameLabel;
     private JTextField  nameField;
     private boolean     canRetrieveInput = false;
-    public ClientGui(Client client){
+    ClientGui(Client client){
         initGui();
         this.client = client;
     }
@@ -45,19 +48,20 @@ public class ClientGui extends JFrame{
         ipAddressLabel.setHorizontalAlignment(JLabel.CENTER);
         ipAddressLabel.setVerticalAlignment(JLabel.CENTER);
         ipAddressField = new JTextField();
+        ipAddressField.setHorizontalAlignment(JTextField.CENTER);
         ipAddressField.setColumns(12);
 
         nameField = new JTextField();
         nameLabel = new JLabel("Name: ");
         nameLabel.setHorizontalAlignment(JLabel.CENTER);
         nameLabel.setVerticalAlignment(JLabel.CENTER);
+        nameField.setHorizontalAlignment(JTextField.CENTER);
         nameField.setColumns(12);
 
         acceptButton = new JButton("Accept");
         acceptButton.setVerticalAlignment(JButton.CENTER);
         acceptButton.setHorizontalAlignment(JButton.CENTER);
 
-        //ipAddressLabel.setLabelFor(ipAddressField);
         introPanel.add(ipAddressLabel);
         introPanel.add(ipAddressField);
         introPanel.add(portLabel);
@@ -80,7 +84,7 @@ public class ClientGui extends JFrame{
         setVisible(true);
 
         textField = new JTextField();
-        textField.setColumns(50);
+        textField.setColumns(53);
 
         textField.addActionListener(new ActionListener() {
             @Override
@@ -88,6 +92,7 @@ public class ClientGui extends JFrame{
                 message = textField.getText();
                 client.sendMessage(message);
                 textField.setText("");
+                scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum());
             }
         });
 
@@ -99,11 +104,11 @@ public class ClientGui extends JFrame{
         textArea.setVisible(true);
         textField.setFont(font);
 
-        JScrollPane scroll = new JScrollPane (textArea);
+        panel.add(textField);
+
+        scroll = new JScrollPane (textArea);
         scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-        panel.add(textField);
 
         acceptButton.addActionListener(new ActionListener() {
             @Override
@@ -141,4 +146,4 @@ public class ClientGui extends JFrame{
         return name;
     }
 }
-//172.20.4.154
+//172.20.6.38
